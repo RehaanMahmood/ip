@@ -1,9 +1,9 @@
 public class Task {
-    private final String description;
+    private final String DESCRIPTION;
     private boolean isDone;
 
     public Task(String description) {
-        this.description = description;
+        this.DESCRIPTION = description;
         this.isDone = false;
     }
 
@@ -23,6 +23,6 @@ public class Task {
         } else {
             check = "[ ] ";
         }
-        return check + this.description;
+        return check + this.DESCRIPTION;
     }
 }
