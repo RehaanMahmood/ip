@@ -17,10 +17,13 @@ public class Duchess {
                 System.out.println("     Bye, see you.");
                 System.out.println("    ____________________________________________________________");
                 break;
+            } else if (input.equals("list")) {
+                printList(Arrays.copyOf(list, count));
+                System.out.println("    ____________________________________________________________\n");
             } else {
                 list[count] = input;
                 count++;
-                printList(Arrays.copyOf(list, count));
+                System.out.println("     Added task: " + input);
                 System.out.println("    ____________________________________________________________\n");
             }
         }
