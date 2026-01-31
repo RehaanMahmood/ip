@@ -8,7 +8,7 @@ public class Duchess {
         System.out.println("     How can I help you?");
         System.out.println("    ____________________________________________________________\n");
         Scanner scanner = new Scanner(System.in);
-        Task[] list = new Task[100];
+        Task[] tasks = new Task[100];
         int count = 0;
         while (true) {
             String input = scanner.nextLine();
@@ -20,37 +20,60 @@ public class Duchess {
             } else if (input.startsWith("mark ")) {
                 String[] words = input.split(" ");
                 int number = Integer.parseInt(words[1]);
-                list[number - 1].setDone();
+                tasks[number - 1].setDone();
                 System.out.println("     Marked this task as done:");
-                System.out.println("       " + list[number - 1]);
+                System.out.println("       " + tasks[number - 1]);
                 System.out.println("    ____________________________________________________________\n");
             } else if (input.startsWith("unmark ")) {
                 String[] words = input.split(" ");
                 int number = Integer.parseInt(words[1]);
-                list[number - 1].setUndone();
+                tasks[number - 1].setUndone();
                 System.out.println("     Unmarked this task:");
-                System.out.println("       " + list[number - 1]);
+                System.out.println("       " + tasks[number - 1]);
                 System.out.println("    ____________________________________________________________\n");
             } else if (input.equals("list")) {
-                printList(Arrays.copyOf(list, count));
+                printTasks(Arrays.copyOf(tasks, count));
                 System.out.println("    ____________________________________________________________\n");
-            } else {
-                if (count >= 100) {
-                    System.out.println("     Your list is full.");
+            } else if (count >= 100) { // If the above conditions aren't true, then the user wants to add a task
+                System.out.println("     Your list is full.");
+            } else { // Logic for adding tasks
+                if (input.startsWith("todo ")) {
+                    ToDo todo = new ToDo(input.substring(5));
+                    tasks[count] = todo;
+                    System.out.println("     Added new task:");
+                    System.out.println("       " + todo);
+                } else if (input.startsWith("deadline ")) {
+                    String[] words = input.substring(9).split(" /by ");
+                    Deadline deadline = new Deadline(words[0], words[1]);
+                    tasks[count] = deadline;
+                    System.out.println("     Added new task:");
+                    System.out.println("       " + deadline);
+                } else if (input.startsWith("event ")) {
+                    String[] words = input.substring(6).split(" /from ");
+                    String[] fromAndTo = words[1].split(" /to ");
+                    Event event = new Event(words[0], fromAndTo[0], fromAndTo[1]);
+                    tasks[count] = event;
+                    System.out.println("     Added new task:");
+                    System.out.println("       " + event);
                 } else {
-                    Task task = new Task(input);
-                    list[count] = task;
-                    count++;
-                    System.out.println("     Added task: " + input);
+                    System.out.println("     Input not recognised.");
+                    System.out.println("    ____________________________________________________________\n");
+                    continue;
+                }
+                count++;
+                if (count == 1) {
+                    System.out.println("     You now have 1 task.");
+                } else {
+                    System.out.println("     You now have " + count + " tasks.");
                 }
                 System.out.println("    ____________________________________________________________\n");
             }
         }
     }
 
-    public static void printList(Task[] list) {
-        for (int i = 0; i < list.length; i++) {
-            System.out.println("     " + (i + 1) + ". " + list[i]);
+    public static void printTasks(Task[] tasks) {
+        for (int i = 0; i < tasks.length; i++) {
+            System.out.println("     " + (i + 1) + ". " + tasks[i]);
         }
     }
 }
