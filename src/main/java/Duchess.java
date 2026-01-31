@@ -35,10 +35,14 @@ public class Duchess {
                 printList(Arrays.copyOf(list, count));
                 System.out.println("    ____________________________________________________________\n");
             } else {
-                Task task = new Task(input);
-                list[count] = task;
-                count++;
-                System.out.println("     Added task: " + input);
+                if (count >= 100) {
+                    System.out.println("     Your list is full.");
+                } else {
+                    Task task = new Task(input);
+                    list[count] = task;
+                    count++;
+                    System.out.println("     Added task: " + input);
+                }
                 System.out.println("    ____________________________________________________________\n");
             }
         }
