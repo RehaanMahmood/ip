@@ -1,0 +1,10 @@
+todo read a book
+deadline do assignment /by Tuesday 4pm
+event exam /from Wednesday 2pm /to Wednesday 4pm
+list
+mark 1
+list
+unmark 1
+list
+hello
+bye
