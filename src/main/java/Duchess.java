@@ -2,71 +2,74 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Duchess {
+    public static final int NO_OF_TASKS = 100;
+    public static final String HORIZONTAL_RULE = "____________________________________________________________";
+
     public static void main(String[] args) {
-        System.out.println("    ____________________________________________________________");
-        System.out.println("     Hey, I'm Duchess.");
-        System.out.println("     How can I help you?");
-        System.out.println("    ____________________________________________________________\n");
+        System.out.println(indent() + HORIZONTAL_RULE);
+        System.out.println(indent(5) + "Hey, I'm Duchess.");
+        System.out.println(indent(5) + "How can I help you?");
+        System.out.println(indent() + HORIZONTAL_RULE + "\n");
         Scanner scanner = new Scanner(System.in);
-        Task[] tasks = new Task[100];
-        int count = 0;
+        Task[] tasks = new Task[NO_OF_TASKS];
+        int taskCount = 0;
         while (true) {
             String input = scanner.nextLine();
-            System.out.println("    ____________________________________________________________");
+            System.out.println(indent() + HORIZONTAL_RULE);
             if (input.equals("bye")) {
-                System.out.println("     Bye, see you.");
-                System.out.println("    ____________________________________________________________");
+                System.out.println(indent(5) + "Bye, see you.");
+                System.out.println(indent() + HORIZONTAL_RULE);
                 break;
             } else if (input.startsWith("mark ")) {
                 String[] words = input.split(" ");
                 int number = Integer.parseInt(words[1]);
                 tasks[number - 1].setDone();
-                System.out.println("     Marked this task as done:");
-                System.out.println("       " + tasks[number - 1]);
-                System.out.println("    ____________________________________________________________\n");
+                System.out.println(indent(5) + "Marked this task as done:");
+                System.out.println(indent(7) + tasks[number - 1]);
+                System.out.println(indent() + HORIZONTAL_RULE + "\n");
             } else if (input.startsWith("unmark ")) {
                 String[] words = input.split(" ");
                 int number = Integer.parseInt(words[1]);
                 tasks[number - 1].setUndone();
-                System.out.println("     Unmarked this task:");
-                System.out.println("       " + tasks[number - 1]);
-                System.out.println("    ____________________________________________________________\n");
+                System.out.println(indent(5) + "Unmarked this task:");
+                System.out.println(indent(7) + tasks[number - 1]);
+                System.out.println(indent() + HORIZONTAL_RULE + "\n");
             } else if (input.equals("list")) {
-                printTasks(Arrays.copyOf(tasks, count));
-                System.out.println("    ____________________________________________________________\n");
-            } else if (count >= 100) { // If the above conditions aren't true, then the user wants to add a task
-                System.out.println("     Your list is full.");
+                printTasks(Arrays.copyOf(tasks, taskCount));
+                System.out.println(indent() + HORIZONTAL_RULE + "\n");
+            } else if (taskCount >= 100) { // If the above conditions aren't true, then the user wants to add a task
+                System.out.println(indent(5) + "Your list is full.");
             } else { // Logic for adding tasks
                 if (input.startsWith("todo ")) {
                     ToDo todo = new ToDo(input.substring(5));
-                    tasks[count] = todo;
-                    System.out.println("     Added new task:");
-                    System.out.println("       " + todo);
+                    tasks[taskCount] = todo;
+                    System.out.println(indent(5) + "Added new task:");
+                    System.out.println(indent(7) + todo);
                 } else if (input.startsWith("deadline ")) {
                     String[] words = input.substring(9).split(" /by ");
                     Deadline deadline = new Deadline(words[0], words[1]);
-                    tasks[count] = deadline;
-                    System.out.println("     Added new task:");
-                    System.out.println("       " + deadline);
+                    tasks[taskCount] = deadline;
+                    System.out.println(indent(5) + "Added new task:");
+                    System.out.println(indent(7) + deadline);
                 } else if (input.startsWith("event ")) {
                     String[] words = input.substring(6).split(" /from ");
                     String[] fromAndTo = words[1].split(" /to ");
                     Event event = new Event(words[0], fromAndTo[0], fromAndTo[1]);
-                    tasks[count] = event;
-                    System.out.println("     Added new task:");
-                    System.out.println("       " + event);
+                    tasks[taskCount] = event;
+                    System.out.println(indent(5) + "Added new task:");
+                    System.out.println(indent(7) + event);
                 } else {
-                    System.out.println("     Input not recognised.");
-                    System.out.println("    ____________________________________________________________\n");
+                    System.out.println(indent(5) + "Input not recognised.");
+                    System.out.println(indent() + HORIZONTAL_RULE + "\n");
                     continue;
                 }
-                count++;
-                if (count == 1) {
-                    System.out.println("     You now have 1 task.");
+                taskCount++;
+                if (taskCount == 1) {
+                    System.out.println(indent(5) + "You now have 1 task.");
                 } else {
-                    System.out.println("     You now have " + count + " tasks.");
+                    System.out.println(indent(5) + "You now have " + taskCount + " tasks.");
                 }
-                System.out.println("    ____________________________________________________________\n");
+                System.out.println(indent() + HORIZONTAL_RULE + "\n");
             }
         }
     }
@@ -75,5 +78,17 @@ public class Duchess {
         for (int i = 0; i < tasks.length; i++) {
             System.out.println("     " + (i + 1) + ". " + tasks[i]);
         }
+    }
+
+    public static String indent(int numSpaces) {
+        String result = "";
+        for (int i = 0; i < numSpaces; i++) {
+            result += " ";
+        }
+        return result;
+    }
+
+    public static String indent() {
+        return indent(4);
     }
 }
