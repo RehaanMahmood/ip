@@ -37,8 +37,6 @@ public class Duchess {
             } else if (input.equals("list")) {
                 printTasks(Arrays.copyOf(tasks, taskCount));
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
-            } else if (taskCount >= 100) { // If the above conditions aren't true, then the user wants to add a task
-                System.out.println(indent(5) + "Your list is full.");
             } else { // Logic for adding tasks
                 Task task;
                 if (input.startsWith("todo ")) {
@@ -55,10 +53,14 @@ public class Duchess {
                     System.out.println(indent() + HORIZONTAL_RULE + "\n");
                     continue;
                 }
-                tasks[taskCount] = task;
-                System.out.println(indent(5) + "Added new task:");
-                System.out.println(indent(7) + task);
-                taskCount++;
+                try {
+                    tasks[taskCount] = task;
+                    System.out.println(indent(5) + "Added new task:");
+                    System.out.println(indent(7) + task);
+                    taskCount++;
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println(indent(5) + "Your list is full.");
+                }
                 if (taskCount == 1) {
                     System.out.println(indent(5) + "You now have 1 task.");
                 } else {
