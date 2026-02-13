@@ -40,29 +40,24 @@ public class Duchess {
             } else if (taskCount >= 100) { // If the above conditions aren't true, then the user wants to add a task
                 System.out.println(indent(5) + "Your list is full.");
             } else { // Logic for adding tasks
+                Task task;
                 if (input.startsWith("todo ")) {
-                    ToDo todo = new ToDo(input.substring(5));
-                    tasks[taskCount] = todo;
-                    System.out.println(indent(5) + "Added new task:");
-                    System.out.println(indent(7) + todo);
+                    task = new ToDo(input.substring(5));
                 } else if (input.startsWith("deadline ")) {
                     String[] words = input.substring(9).split(" /by ");
-                    Deadline deadline = new Deadline(words[0], words[1]);
-                    tasks[taskCount] = deadline;
-                    System.out.println(indent(5) + "Added new task:");
-                    System.out.println(indent(7) + deadline);
+                    task = new Deadline(words[0], words[1]);
                 } else if (input.startsWith("event ")) {
                     String[] words = input.substring(6).split(" /from ");
                     String[] fromAndTo = words[1].split(" /to ");
-                    Event event = new Event(words[0], fromAndTo[0], fromAndTo[1]);
-                    tasks[taskCount] = event;
-                    System.out.println(indent(5) + "Added new task:");
-                    System.out.println(indent(7) + event);
+                    task = new Event(words[0], fromAndTo[0], fromAndTo[1]);
                 } else {
                     System.out.println(indent(5) + "Input not recognised.");
                     System.out.println(indent() + HORIZONTAL_RULE + "\n");
                     continue;
                 }
+                tasks[taskCount] = task;
+                System.out.println(indent(5) + "Added new task:");
+                System.out.println(indent(7) + task);
                 taskCount++;
                 if (taskCount == 1) {
                     System.out.println(indent(5) + "You now have 1 task.");
