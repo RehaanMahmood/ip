@@ -1,5 +1,11 @@
+package duchess;
+
 import java.util.Arrays;
 import java.util.Scanner;
+import task.Deadline;
+import task.Event;
+import task.Task;
+import task.ToDo;
 
 public class Duchess {
     public static final int NO_OF_TASKS = 100;
