@@ -76,14 +76,10 @@ public class Duchess {
                     System.out.println(indent() + HORIZONTAL_RULE + "\n");
                     continue;
                 }
-                try {
-                    tasks.add(task);
-                    System.out.println(indent(5) + "Added new task:");
-                    System.out.println(indent(7) + task);
-                    taskCount++;
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println(indent(5) + "Your list is full.");
-                }
+                tasks.add(task);
+                System.out.println(indent(5) + "Added new task:");
+                System.out.println(indent(7) + task);
+                taskCount++;
                 if (taskCount == 1) {
                     System.out.println(indent(5) + "You now have 1 task.");
                 } else {
