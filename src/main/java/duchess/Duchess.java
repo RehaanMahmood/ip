@@ -1,6 +1,6 @@
 package duchess;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Scanner;
 import task.Deadline;
 import task.Event;
@@ -8,7 +8,6 @@ import task.Task;
 import task.ToDo;
 
 public class Duchess {
-    public static final int NO_OF_TASKS = 100;
     public static final String HORIZONTAL_RULE = "____________________________________________________________";
 
     public static void main(String[] args) {
@@ -17,7 +16,7 @@ public class Duchess {
         System.out.println(indent(5) + "How can I help you?");
         System.out.println(indent() + HORIZONTAL_RULE + "\n");
         Scanner scanner = new Scanner(System.in);
-        Task[] tasks = new Task[NO_OF_TASKS];
+        ArrayList<Task> tasks = new ArrayList<>();
         int taskCount = 0;
         while (true) {
             String input = scanner.nextLine();
@@ -29,19 +28,19 @@ public class Duchess {
             } else if (input.startsWith("mark ")) {
                 String[] words = input.split(" ");
                 int number = Integer.parseInt(words[1]);
-                tasks[number - 1].setDone();
+                tasks.get(number - 1).setDone();
                 System.out.println(indent(5) + "Marked this task as done:");
-                System.out.println(indent(7) + tasks[number - 1]);
+                System.out.println(indent(7) + tasks.get(number - 1));
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
             } else if (input.startsWith("unmark ")) {
                 String[] words = input.split(" ");
                 int number = Integer.parseInt(words[1]);
-                tasks[number - 1].setUndone();
+                tasks.get(number - 1).setUndone();
                 System.out.println(indent(5) + "Unmarked this task:");
-                System.out.println(indent(7) + tasks[number - 1]);
+                System.out.println(indent(7) + tasks.get(number - 1));
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
             } else if (input.equals("list")) {
-                printTasks(Arrays.copyOf(tasks, taskCount));
+                printTasks(tasks);
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
             } else { // Logic for adding tasks
                 Task task;
@@ -60,7 +59,7 @@ public class Duchess {
                     continue;
                 }
                 try {
-                    tasks[taskCount] = task;
+                    tasks.add(task);
                     System.out.println(indent(5) + "Added new task:");
                     System.out.println(indent(7) + task);
                     taskCount++;
@@ -77,9 +76,9 @@ public class Duchess {
         }
     }
 
-    public static void printTasks(Task[] tasks) {
-        for (int i = 0; i < tasks.length; i++) {
-            System.out.println("     " + (i + 1) + ". " + tasks[i]);
+    public static void printTasks(ArrayList<Task> tasks) {
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println("     " + (i + 1) + ". " + tasks.get(i));
         }
     }
 
