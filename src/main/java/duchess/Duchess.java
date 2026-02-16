@@ -8,9 +8,18 @@ import task.Task;
 import task.ToDo;
 
 public class Duchess {
-    public static final String HORIZONTAL_RULE = "____________________________________________________________";
+    public static final String HORIZONTAL_RULE = "__________________________________________________________________________";
 
     public static void main(String[] args) {
+        System.out.println(indent() + HORIZONTAL_RULE);
+        System.out.println(indent(5) + "$$$$$$$\\                      $$\\                                     ");
+        System.out.println(indent(5) + "$$  __$$\\                     $$ |                                    ");
+        System.out.println(indent(5) + "$$ |  $$ |$$\\   $$\\  $$$$$$$\\ $$$$$$$\\   $$$$$$\\   $$$$$$$\\  $$$$$$$\\ ");
+        System.out.println(indent(5) + "$$ |  $$ |$$ |  $$ |$$  _____|$$  __$$\\ $$  __$$\\ $$  _____|$$  _____|");
+        System.out.println(indent(5) + "$$ |  $$ |$$ |  $$ |$$ /      $$ |  $$ |$$$$$$$$ |\\$$$$$$\\  \\$$$$$$\\  ");
+        System.out.println(indent(5) + "$$ |  $$ |$$ |  $$ |$$ |      $$ |  $$ |$$   ____| \\____$$\\  \\____$$\\ ");
+        System.out.println(indent(5) + "$$$$$$$  |\\$$$$$$  |\\$$$$$$$\\ $$ |  $$ |\\$$$$$$$\\ $$$$$$$  |$$$$$$$  |");
+        System.out.println(indent(5) + "\\_______/  \\______/  \\_______|\\__|  \\__| \\_______|\\_______/ \\_______/ ");
         System.out.println(indent() + HORIZONTAL_RULE);
         System.out.println(indent(5) + "Hey, I'm Duchess.");
         System.out.println(indent(5) + "How can I help you?");
