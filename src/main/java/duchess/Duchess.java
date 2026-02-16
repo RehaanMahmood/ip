@@ -39,6 +39,24 @@ public class Duchess {
                 System.out.println(indent(5) + "Unmarked this task:");
                 System.out.println(indent(7) + tasks.get(number - 1));
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
+            } else if (input.startsWith("delete ")) {
+                String[] words = input.split(" ");
+                int number = Integer.parseInt(words[1]);
+                try {
+                    Task failureFlag = tasks.get(number - 1);
+                    System.out.println(indent(5) + "Okay, deleted this task:");
+                    System.out.println(indent(7) + tasks.get(number - 1));
+                    tasks.remove(number - 1);
+                    taskCount--;
+                    if (taskCount == 1) {
+                        System.out.println(indent(5) + "You now have 1 task.");
+                    } else {
+                        System.out.println(indent(5) + "You now have " + taskCount + " tasks.");
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println(indent(5) + "You don't have any tasks.");
+                }
+                System.out.println(indent() + HORIZONTAL_RULE + "\n");
             } else if (input.equals("list")) {
                 printTasks(tasks);
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
@@ -77,8 +95,12 @@ public class Duchess {
     }
 
     public static void printTasks(ArrayList<Task> tasks) {
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println("     " + (i + 1) + ". " + tasks.get(i));
+        if (tasks.isEmpty()) {
+            System.out.println(indent(5) + "You have no tasks.");
+        } else {
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println(indent(5) + (i + 1) + ". " + tasks.get(i));
+            }
         }
     }
 
