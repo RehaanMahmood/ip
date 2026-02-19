@@ -52,7 +52,7 @@ public class Duchess {
                 String[] words = input.split(" ");
                 int number = Integer.parseInt(words[1]);
                 try {
-                    Task failureFlag = tasks.get(number - 1);
+                    Task failureFlag = tasks.get(number - 1); // Throws exception immediately
                     System.out.println(indent(5) + "Okay, deleted this task:");
                     System.out.println(indent(7) + tasks.get(number - 1));
                     tasks.remove(number - 1);
