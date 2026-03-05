@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Handles saving tasks into a text file and loading those tasks upon startup.
+ */
 public class Storage {
     private final String filePath;
 
@@ -16,6 +19,10 @@ public class Storage {
         this.filePath = filePath;
     }
 
+    /**
+     * Writes the tasks in <code>tasks</code> as a list to a text file stored locally.
+     * @param tasks the list of tasks.
+     */
     public void saveTasks(TaskList tasks) {
         try {
             File file = new File(this.filePath);
@@ -30,6 +37,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Converts <code>task</code> to a string format to be stored in a text file and read upon startup.
+     * @param task the task to be stored.
+     * @return a string representation of <code>task</code> to be stored in a text file.
+     */
     private String taskToFileString(Task task) {
         String done;
         String rest;
@@ -56,6 +68,10 @@ public class Storage {
         }
     }
 
+    /**
+     * Reads the existing tasks stored in the text file upon startup and adds them to <code>tasks</code>.
+     * @param tasks the list the existing tasks are added to.
+     */
     public void loadTasks(TaskList tasks) {
         File file = new File(this.filePath);
         if (!file.exists()) {
