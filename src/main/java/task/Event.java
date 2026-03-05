@@ -13,6 +13,10 @@ public class Event extends Task {
         this.to = to;
     }
 
+    /**
+     * Returns a string representation of the event to be displayed to the user.
+     * @return a string representation of the event to be displayed to the user.
+     */
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: " + this.from + " to: " + this.to + ")";

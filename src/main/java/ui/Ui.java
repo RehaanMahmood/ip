@@ -19,6 +19,9 @@ public class Ui {
         this.tasks = tasks;
     }
 
+    /**
+     * Displays the logo and introduction and loads the existing tasks.
+     */
     public void start() {
         printHorizontalRule("");
         System.out.println(indent(5) + "$$$$$$$\\                      $$\\                                     ");
@@ -37,6 +40,9 @@ public class Ui {
         this.storage.loadTasks(this.tasks);
     }
 
+    /**
+     * Inputs user commands, parses them and makes the required updates to the to-do list.
+     */
     public void run() {
         while (true) {
             String input = this.scanner.nextLine();
@@ -112,6 +118,10 @@ public class Ui {
         }
     }
 
+    /**
+     * Prints the <code>Task</code> objects in <code>tasks</code> in an ordered list.
+     * @param tasks the list of <code>Task</code> objects.
+     */
     private void printTasks(TaskList tasks) {
         if (tasks.size() == 0) {
             System.out.println(indent(5) + "There no tasks.");
@@ -122,22 +132,43 @@ public class Ui {
         }
     }
 
+    /**
+     * Prints a horizontal line indented by <code>indent</code> spaces and appended by <code>end</code>.
+     * @param indent number of spaces to indent by.
+     * @param end string appended at the end of the horizontal line.
+     */
     private void printHorizontalRule(int indent, String end) {
         System.out.println(indent(indent) + "__________________________________________________________________________" + end);
     }
 
+    /**
+     * Prints a horizontal line indented by <code>indent</code> spaces with a new line at the end.
+     * @param indent number of spaces to indent by.
+     */
     private void printHorizontalRule(int indent) {
         printHorizontalRule(indent, "\n");
     }
 
+    /**
+     * Prints a horizontal line indented by 4 spaces and appended by <code>end</code>.
+     * @param end string appended at the end of the horizontal line.
+     */
     private void printHorizontalRule(String end) {
         printHorizontalRule(4, end);
     }
 
+    /**
+     * Prints a horizontal line indented by 4 spaces with a new line at the end.
+     */
     private void printHorizontalRule() {
         printHorizontalRule(4, "\n");
     }
 
+    /**
+     * Returns a string with <code>numSpaces</code> spaces.
+     * @param numSpaces the number of spaces required.
+     * @return a string with <code>numSpaces</code> spaces.
+     */
     public static String indent(int numSpaces) {
         String result = "";
         for (int i = 0; i < numSpaces; i++) {
