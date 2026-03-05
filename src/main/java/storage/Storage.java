@@ -1,10 +1,10 @@
 package storage;
 
-import duchess.Duchess;
 import task.Deadline;
 import task.Event;
 import task.Task;
 import task.ToDo;
+import ui.Ui;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -14,10 +14,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class Storage {
+    private final String filePath;
 
-    public static void saveTasks(ArrayList<Task> tasks) {
+    public Storage(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public void saveTasks(ArrayList<Task> tasks) {
         try {
-            File file = new File(Duchess.FILE_PATH);
+            File file = new File(this.filePath);
             file.getParentFile().mkdirs();
             FileWriter writer = new FileWriter(file);
             for (Task task : tasks) {
@@ -25,11 +30,11 @@ public class Storage {
             }
             writer.close();
         } catch (IOException e) {
-            System.out.println(Duchess.indent(5) + "Error saving tasks.");
+            System.out.println(Ui.indent(5) + "Error saving tasks.");
         }
     }
 
-    public static String taskToFileString(Task task) {
+    private String taskToFileString(Task task) {
         String done;
         String rest;
         String taskStr = task.toString();
@@ -55,13 +60,13 @@ public class Storage {
         }
     }
 
-    public static void loadTasks(ArrayList<Task> tasks) {
-        File file = new File(Duchess.FILE_PATH);
+    public void loadTasks(ArrayList<Task> tasks) {
+        File file = new File(this.filePath);
         if (!file.exists()) {
             return;
         }
         try {
-            java.util.List<String> lines = Files.readAllLines(Paths.get(Duchess.FILE_PATH));
+            java.util.List<String> lines = Files.readAllLines(Paths.get(this.filePath));
             for (String line : lines) {
                 try {
                     String[] parts = line.split(" \\| ");
@@ -81,11 +86,11 @@ public class Storage {
                     }
                     tasks.add(task);
                 } catch (Exception e) {
-                    System.out.println("Skipping corrupted line \"" + line + "\"");
+                    System.out.println(Ui.indent(5) + "Skipping corrupted line \"" + line + "\"\n");
                 }
             }
         } catch (IOException e) {
-            System.out.println(Duchess.indent(5) + "Error loading tasks.");
+            System.out.println(Ui.indent(5) + "Error loading tasks.");
         }
     }
 }
