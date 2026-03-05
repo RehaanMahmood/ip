@@ -1,9 +1,6 @@
 package storage;
 
-import task.Deadline;
-import task.Event;
-import task.Task;
-import task.ToDo;
+import task.*;
 import ui.Ui;
 
 import java.io.File;
@@ -11,7 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 public class Storage {
     private final String filePath;
@@ -20,13 +16,13 @@ public class Storage {
         this.filePath = filePath;
     }
 
-    public void saveTasks(ArrayList<Task> tasks) {
+    public void saveTasks(TaskList tasks) {
         try {
             File file = new File(this.filePath);
             file.getParentFile().mkdirs();
             FileWriter writer = new FileWriter(file);
-            for (Task task : tasks) {
-                writer.write(taskToFileString(task) + "\n");
+            for (int i = 0; i < tasks.size(); i++) {
+                writer.write(taskToFileString(tasks.get(i)) + "\n");
             }
             writer.close();
         } catch (IOException e) {
@@ -60,7 +56,7 @@ public class Storage {
         }
     }
 
-    public void loadTasks(ArrayList<Task> tasks) {
+    public void loadTasks(TaskList tasks) {
         File file = new File(this.filePath);
         if (!file.exists()) {
             return;

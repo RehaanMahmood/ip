@@ -1,11 +1,10 @@
 package duchess;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 
 import storage.Storage;
-import task.Task;
+import task.TaskList;
 import ui.Ui;
 
 public class Duchess {
@@ -13,8 +12,9 @@ public class Duchess {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Storage storage = new Storage("data" + File.separator + "duchess.txt");
-        ArrayList<Task> tasks = new ArrayList<>();
+        TaskList tasks = new TaskList();
         Ui ui = new Ui(scanner, storage, tasks);
+        ui.start();
         ui.run();
     }
 }

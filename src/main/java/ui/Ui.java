@@ -1,28 +1,24 @@
 package ui;
 
 import storage.Storage;
-import task.Deadline;
-import task.Event;
-import task.Task;
-import task.ToDo;
+import task.*;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ui {
     private Scanner scanner;
-    private ArrayList<Task> tasks;
+    private TaskList tasks;
     private Storage storage;
 
     public static final String HORIZONTAL_RULE = "__________________________________________________________________________";
 
-    public Ui(Scanner scanner,  Storage storage,  ArrayList<Task> tasks) {
+    public Ui(Scanner scanner, Storage storage, TaskList tasks) {
         this.scanner = scanner;
         this.storage = storage;
         this.tasks = tasks;
     }
 
-    public void run() {
+    public void start() {
         System.out.println(indent() + HORIZONTAL_RULE);
         System.out.println(indent(5) + "$$$$$$$\\                      $$\\                                     ");
         System.out.println(indent(5) + "$$  __$$\\                     $$ |                                    ");
@@ -37,87 +33,80 @@ public class Ui {
         System.out.println(indent(5) + "How can I help you?");
         System.out.println(indent() + HORIZONTAL_RULE + "\n");
 
-        this.storage.loadTasks(tasks);
+        this.storage.loadTasks(this.tasks);
+    }
 
+    public void run() {
         while (true) {
-            String input = scanner.nextLine();
+            String input = this.scanner.nextLine();
             System.out.println(indent() + HORIZONTAL_RULE);
             if (input.equals("bye")) {
                 System.out.println(indent(5) + "Bye, see you.");
                 System.out.println(indent() + HORIZONTAL_RULE);
                 break;
             } else if (input.startsWith("mark ")) {
-                String[] words = input.split(" ");
-                int number = Integer.parseInt(words[1]);
-                tasks.get(number - 1).setDone();
+                int index = Parser.parseIndex(input);
+                this.tasks.mark(index);
                 System.out.println(indent(5) + "Marked this task as done:");
-                System.out.println(indent(7) + tasks.get(number - 1));
+                System.out.println(indent(7) + this.tasks.get(index));
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
-                storage.saveTasks(tasks);
             } else if (input.startsWith("unmark ")) {
-                String[] words = input.split(" ");
-                int number = Integer.parseInt(words[1]);
-                tasks.get(number - 1).setUndone();
+                int index = Parser.parseIndex(input);
+                this.tasks.unmark(index);
                 System.out.println(indent(5) + "Unmarked this task:");
-                System.out.println(indent(7) + tasks.get(number - 1));
+                System.out.println(indent(7) + this.tasks.get(index));
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
             } else if (input.startsWith("delete ")) {
-                String[] words = input.split(" ");
-                int number = Integer.parseInt(words[1]);
+                int index = Parser.parseIndex(input);
                 try {
-                    Task failureFlag = tasks.get(number - 1); // Throws exception immediately
+                    Task failureFlag = this.tasks.get(index); // Throws exception immediately
                     System.out.println(indent(5) + "Okay, deleted this task:");
-                    System.out.println(indent(7) + tasks.get(number - 1));
-                    tasks.remove(number - 1);
-                    if (tasks.size() == 1) {
+                    System.out.println(indent(7) + this.tasks.get(index));
+                    this.tasks.remove(index);
+                    if (this.tasks.size() == 1) {
                         System.out.println(indent(5) + "You now have 1 task.");
                     } else {
-                        System.out.println(indent(5) + "You now have " + tasks.size() + " tasks.");
+                        System.out.println(indent(5) + "You now have " + this.tasks.size() + " tasks.");
                     }
                 } catch (IndexOutOfBoundsException e) {
                     System.out.println(indent(5) + "You don't have any tasks.");
                 }
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
-                storage.saveTasks(tasks);
             } else if (input.equals("list")) {
-                printTasks(tasks);
+                printTasks();
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
-            } else { // Logic for adding tasks
+            } else if (input.startsWith("todo ") || input.startsWith("deadline ") || input.startsWith("event ")) {
                 Task task;
-                if (input.startsWith("todo ")) {
-                    task = new ToDo(input.substring(5));
-                } else if (input.startsWith("deadline ")) {
-                    String[] words = input.substring(9).split(" /by ");
-                    task = new Deadline(words[0], words[1]);
-                } else if (input.startsWith("event ")) {
-                    String[] words = input.substring(6).split(" /from ");
-                    String[] fromAndTo = words[1].split(" /to ");
-                    task = new Event(words[0], fromAndTo[0], fromAndTo[1]);
-                } else {
-                    System.out.println(indent(5) + "Input not recognised.");
+                try {
+                    task = Parser.parseTask(input);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println(indent(5) + "Incorrect input.");
                     System.out.println(indent() + HORIZONTAL_RULE + "\n");
                     continue;
                 }
-                tasks.add(task);
+                this.tasks.add(task);
                 System.out.println(indent(5) + "Added new task:");
                 System.out.println(indent(7) + task);
-                storage.saveTasks(tasks);
-                if (tasks.size() == 1) {
+                if (this.tasks.size() == 1) {
                     System.out.println(indent(5) + "You now have 1 task.");
                 } else {
-                    System.out.println(indent(5) + "You now have " + tasks.size() + " tasks.");
+                    System.out.println(indent(5) + "You now have " + this.tasks.size() + " tasks.");
                 }
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
+            }  else {
+                System.out.println(indent(5) + "Input not recognised.");
+                System.out.println(indent() + HORIZONTAL_RULE + "\n");
             }
+            this.storage.saveTasks(this.tasks);
         }
     }
 
-    public void printTasks(ArrayList<Task> tasks) {
-        if (tasks.isEmpty()) {
+    private void printTasks() {
+        if (this.tasks.size() == 0) {
             System.out.println(indent(5) + "You have no tasks.");
         } else {
-            for (int i = 0; i < tasks.size(); i++) {
-                System.out.println(indent(5) + (i + 1) + ". " + tasks.get(i));
+            for (int i = 0; i < this.tasks.size(); i++) {
+                System.out.println(indent(5) + (i + 1) + ". " + this.tasks.get(i));
             }
         }
     }
