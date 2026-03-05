@@ -63,10 +63,10 @@ public class Duchess {
                     System.out.println(indent(5) + "Okay, deleted this task:");
                     System.out.println(indent(7) + tasks.get(number - 1));
                     tasks.remove(number - 1);
-                    if (task.size() == 1) {
+                    if (tasks.size() == 1) {
                         System.out.println(indent(5) + "You now have 1 task.");
                     } else {
-                        System.out.println(indent(5) + "You now have " + task.size() + " tasks.");
+                        System.out.println(indent(5) + "You now have " + tasks.size() + " tasks.");
                     }
                 } catch (IndexOutOfBoundsException e) {
                     System.out.println(indent(5) + "You don't have any tasks.");
@@ -96,7 +96,7 @@ public class Duchess {
                 System.out.println(indent(5) + "Added new task:");
                 System.out.println(indent(7) + task);
                 saveTasks(tasks);
-                if (task.size() == 1) {
+                if (tasks.size() == 1) {
                     System.out.println(indent(5) + "You now have 1 task.");
                 } else {
                     System.out.println(indent(5) + "You now have " + tasks.size() + " tasks.");
@@ -149,7 +149,7 @@ public class Duchess {
     public static void loadTasks(ArrayList<Task> tasks) {
         File file = new File(FILE_PATH);
         if (!file.exists()) {
-            return 0;
+            return;
         }
         try {
             java.util.List<String> lines = Files.readAllLines(Paths.get(FILE_PATH));
