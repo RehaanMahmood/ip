@@ -1,5 +1,8 @@
 package task;
 
+/**
+ * Represents an event with some start time and end time, both represented as strings without any format.
+ */
 public class Event extends Task {
     private final String from;
     private final String to;

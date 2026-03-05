@@ -2,6 +2,9 @@ package task;
 
 import java.util.ArrayList;
 
+/**
+ * A list of Task objects. Handles addition, deletion, finding, marking and unmarking of tasks.
+ */
 public class TaskList {
     private ArrayList<Task> tasks;
 

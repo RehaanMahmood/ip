@@ -1,5 +1,8 @@
 package task;
 
+/**
+ * Represents a deadline with a due date.
+ */
 public class Deadline extends Task {
     private final String by;
 

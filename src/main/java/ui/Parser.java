@@ -5,6 +5,9 @@ import task.Event;
 import task.Task;
 import task.ToDo;
 
+/**
+ * Provides methods that return relevant information based on the user's input.
+ */
 public class Parser {
 
     public static int parseIndex(String input) {

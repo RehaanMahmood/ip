@@ -5,6 +5,9 @@ import task.*;
 
 import java.util.Scanner;
 
+/**
+ * The user interface. Interacts with the user and displays required information.
+ */
 public class Ui {
     private Scanner scanner;
     private TaskList tasks;

@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Handles saving tasks into a text file and loading those tasks upon startup.
+ */
 public class Storage {
     private final String filePath;
 

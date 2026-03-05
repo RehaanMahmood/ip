@@ -7,6 +7,10 @@ import storage.Storage;
 import task.TaskList;
 import ui.Ui;
 
+
+/**
+ * Represents the chatbot that the user interacts with.
+ */
 public class Duchess {
 
     public static void main(String[] args) {
