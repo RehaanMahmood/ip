@@ -13,7 +13,7 @@ public class Parser {
         return number - 1;
     }
 
-    public static Task parseTask(String input) throws ArrayIndexOutOfBoundsException{
+    public static Task parseTask(String input) throws ArrayIndexOutOfBoundsException {
         Task task = new Task("");
         if (input.startsWith("todo ")) {
             task = new ToDo(input.substring(5));
@@ -26,5 +26,9 @@ public class Parser {
             task = new Event(words[0], fromAndTo[0], fromAndTo[1]);
         }
         return task;
+    }
+
+    public static String parseFind(String input) {
+        return input.substring(5);
     }
 }
