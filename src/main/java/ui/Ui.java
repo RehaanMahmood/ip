@@ -10,8 +10,6 @@ public class Ui {
     private TaskList tasks;
     private Storage storage;
 
-    public static final String HORIZONTAL_RULE = "__________________________________________________________________________";
-
     public Ui(Scanner scanner, Storage storage, TaskList tasks) {
         this.scanner = scanner;
         this.storage = storage;
@@ -19,7 +17,7 @@ public class Ui {
     }
 
     public void start() {
-        System.out.println(indent() + HORIZONTAL_RULE);
+        printHorizontalRule("");
         System.out.println(indent(5) + "$$$$$$$\\                      $$\\                                     ");
         System.out.println(indent(5) + "$$  __$$\\                     $$ |                                    ");
         System.out.println(indent(5) + "$$ |  $$ |$$\\   $$\\  $$$$$$$\\ $$$$$$$\\   $$$$$$\\   $$$$$$$\\  $$$$$$$\\ ");
@@ -28,10 +26,10 @@ public class Ui {
         System.out.println(indent(5) + "$$ |  $$ |$$ |  $$ |$$ |      $$ |  $$ |$$   ____| \\____$$\\  \\____$$\\ ");
         System.out.println(indent(5) + "$$$$$$$  |\\$$$$$$  |\\$$$$$$$\\ $$ |  $$ |\\$$$$$$$\\ $$$$$$$  |$$$$$$$  |");
         System.out.println(indent(5) + "\\_______/  \\______/  \\_______|\\__|  \\__| \\_______|\\_______/ \\_______/ ");
-        System.out.println(indent() + HORIZONTAL_RULE);
+        printHorizontalRule("");
         System.out.println(indent(5) + "Hey, I'm Duchess.");
         System.out.println(indent(5) + "How can I help you?");
-        System.out.println(indent() + HORIZONTAL_RULE + "\n");
+        printHorizontalRule();
 
         this.storage.loadTasks(this.tasks);
     }
@@ -39,23 +37,23 @@ public class Ui {
     public void run() {
         while (true) {
             String input = this.scanner.nextLine();
-            System.out.println(indent() + HORIZONTAL_RULE);
+            printHorizontalRule("");
             if (input.equals("bye")) {
                 System.out.println(indent(5) + "Bye, see you.");
-                System.out.println(indent() + HORIZONTAL_RULE);
+                printHorizontalRule("");
                 break;
             } else if (input.startsWith("mark ")) {
                 int index = Parser.parseIndex(input);
                 this.tasks.mark(index);
                 System.out.println(indent(5) + "Marked this task as done:");
                 System.out.println(indent(7) + this.tasks.get(index));
-                System.out.println(indent() + HORIZONTAL_RULE + "\n");
+                printHorizontalRule();
             } else if (input.startsWith("unmark ")) {
                 int index = Parser.parseIndex(input);
                 this.tasks.unmark(index);
                 System.out.println(indent(5) + "Unmarked this task:");
                 System.out.println(indent(7) + this.tasks.get(index));
-                System.out.println(indent() + HORIZONTAL_RULE + "\n");
+                printHorizontalRule();
             } else if (input.startsWith("delete ")) {
                 int index = Parser.parseIndex(input);
                 try {
@@ -71,17 +69,20 @@ public class Ui {
                 } catch (IndexOutOfBoundsException e) {
                     System.out.println(indent(5) + "You don't have any tasks.");
                 }
-                System.out.println(indent() + HORIZONTAL_RULE + "\n");
+                printHorizontalRule();
             } else if (input.equals("list")) {
-                printTasks();
-                System.out.println(indent() + HORIZONTAL_RULE + "\n");
+                if (this.tasks.size() > 0) {
+                    System.out.println(indent(5) + "You have the following tasks:");
+                }
+                printTasks(this.tasks);
+                printHorizontalRule();
             } else if (input.startsWith("todo ") || input.startsWith("deadline ") || input.startsWith("event ")) {
                 Task task;
                 try {
                     task = Parser.parseTask(input);
                 } catch (ArrayIndexOutOfBoundsException e) {
                     System.out.println(indent(5) + "Incorrect input.");
-                    System.out.println(indent() + HORIZONTAL_RULE + "\n");
+                    printHorizontalRule();
                     continue;
                 }
                 this.tasks.add(task);
@@ -92,23 +93,46 @@ public class Ui {
                 } else {
                     System.out.println(indent(5) + "You now have " + this.tasks.size() + " tasks.");
                 }
-                System.out.println(indent() + HORIZONTAL_RULE + "\n");
-            }  else {
+                printHorizontalRule();
+            }  else if (input.startsWith("find ")) {
+                TaskList tasksFound = this.tasks.find(Parser.parseFind(input));
+                if (tasksFound.size() > 0) {
+                    System.out.println(indent(5) + "The following tasks were found:");
+                }
+                printTasks(tasksFound);
+                printHorizontalRule();
+            } else {
                 System.out.println(indent(5) + "Input not recognised.");
-                System.out.println(indent() + HORIZONTAL_RULE + "\n");
+                printHorizontalRule();
             }
             this.storage.saveTasks(this.tasks);
         }
     }
 
-    private void printTasks() {
-        if (this.tasks.size() == 0) {
-            System.out.println(indent(5) + "You have no tasks.");
+    private void printTasks(TaskList tasks) {
+        if (tasks.size() == 0) {
+            System.out.println(indent(5) + "There no tasks.");
         } else {
-            for (int i = 0; i < this.tasks.size(); i++) {
-                System.out.println(indent(5) + (i + 1) + ". " + this.tasks.get(i));
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println(indent(5) + (i + 1) + ". " + tasks.get(i));
             }
         }
+    }
+
+    private void printHorizontalRule(int indent, String end) {
+        System.out.println(indent(indent) + "__________________________________________________________________________" + end);
+    }
+
+    private void printHorizontalRule(int indent) {
+        printHorizontalRule(indent, "\n");
+    }
+
+    private void printHorizontalRule(String end) {
+        printHorizontalRule(4, end);
+    }
+
+    private void printHorizontalRule() {
+        printHorizontalRule(4, "\n");
     }
 
     public static String indent(int numSpaces) {
@@ -117,9 +141,5 @@ public class Ui {
             result += " ";
         }
         return result;
-    }
-
-    public static String indent() {
-        return indent(4);
     }
 }
