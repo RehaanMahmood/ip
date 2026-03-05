@@ -1,6 +1,6 @@
 package duchess;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileWriter;
@@ -13,18 +13,26 @@ import task.Task;
 import task.ToDo;
 
 public class Duchess {
-    public static final int NO_OF_TASKS = 100;
-    public static final String HORIZONTAL_RULE = "____________________________________________________________";
+    public static final String HORIZONTAL_RULE = "__________________________________________________________________________";
     public static final String FILE_PATH = "data" + File.separator + "duchess.txt";
 
     public static void main(String[] args) {
+        System.out.println(indent() + HORIZONTAL_RULE);
+        System.out.println(indent(5) + "$$$$$$$\\                      $$\\                                     ");
+        System.out.println(indent(5) + "$$  __$$\\                     $$ |                                    ");
+        System.out.println(indent(5) + "$$ |  $$ |$$\\   $$\\  $$$$$$$\\ $$$$$$$\\   $$$$$$\\   $$$$$$$\\  $$$$$$$\\ ");
+        System.out.println(indent(5) + "$$ |  $$ |$$ |  $$ |$$  _____|$$  __$$\\ $$  __$$\\ $$  _____|$$  _____|");
+        System.out.println(indent(5) + "$$ |  $$ |$$ |  $$ |$$ /      $$ |  $$ |$$$$$$$$ |\\$$$$$$\\  \\$$$$$$\\  ");
+        System.out.println(indent(5) + "$$ |  $$ |$$ |  $$ |$$ |      $$ |  $$ |$$   ____| \\____$$\\  \\____$$\\ ");
+        System.out.println(indent(5) + "$$$$$$$  |\\$$$$$$  |\\$$$$$$$\\ $$ |  $$ |\\$$$$$$$\\ $$$$$$$  |$$$$$$$  |");
+        System.out.println(indent(5) + "\\_______/  \\______/  \\_______|\\__|  \\__| \\_______|\\_______/ \\_______/ ");
         System.out.println(indent() + HORIZONTAL_RULE);
         System.out.println(indent(5) + "Hey, I'm Duchess.");
         System.out.println(indent(5) + "How can I help you?");
         System.out.println(indent() + HORIZONTAL_RULE + "\n");
         Scanner scanner = new Scanner(System.in);
-        Task[] tasks = new Task[NO_OF_TASKS];
-        int taskCount = loadTasks(tasks);
+        ArrayList<Task> tasks = new ArrayList<>();
+        loadTasks(tasks);
         while (true) {
             String input = scanner.nextLine();
             System.out.println(indent() + HORIZONTAL_RULE);
@@ -35,21 +43,38 @@ public class Duchess {
             } else if (input.startsWith("mark ")) {
                 String[] words = input.split(" ");
                 int number = Integer.parseInt(words[1]);
-                tasks[number - 1].setDone();
+                tasks.get(number - 1).setDone();
                 System.out.println(indent(5) + "Marked this task as done:");
-                System.out.println(indent(7) + tasks[number - 1]);
+                System.out.println(indent(7) + tasks.get(number - 1));
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
-                saveTasks(tasks, taskCount);
+                saveTasks(tasks);
             } else if (input.startsWith("unmark ")) {
                 String[] words = input.split(" ");
                 int number = Integer.parseInt(words[1]);
-                tasks[number - 1].setUndone();
+                tasks.get(number - 1).setUndone();
                 System.out.println(indent(5) + "Unmarked this task:");
-                System.out.println(indent(7) + tasks[number - 1]);
+                System.out.println(indent(7) + tasks.get(number - 1));
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
-                saveTasks(tasks, taskCount);
+            } else if (input.startsWith("delete ")) {
+                String[] words = input.split(" ");
+                int number = Integer.parseInt(words[1]);
+                try {
+                    Task failureFlag = tasks.get(number - 1); // Throws exception immediately
+                    System.out.println(indent(5) + "Okay, deleted this task:");
+                    System.out.println(indent(7) + tasks.get(number - 1));
+                    tasks.remove(number - 1);
+                    if (task.size() == 1) {
+                        System.out.println(indent(5) + "You now have 1 task.");
+                    } else {
+                        System.out.println(indent(5) + "You now have " + task.size() + " tasks.");
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println(indent(5) + "You don't have any tasks.");
+                }
+                System.out.println(indent() + HORIZONTAL_RULE + "\n");
+                saveTasks(tasks);
             } else if (input.equals("list")) {
-                printTasks(Arrays.copyOf(tasks, taskCount));
+                printTasks(tasks);
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
             } else { // Logic for adding tasks
                 Task task;
@@ -67,32 +92,27 @@ public class Duchess {
                     System.out.println(indent() + HORIZONTAL_RULE + "\n");
                     continue;
                 }
-                try {
-                    tasks[taskCount] = task;
-                    System.out.println(indent(5) + "Added new task:");
-                    System.out.println(indent(7) + task);
-                    taskCount++;
-                    saveTasks(tasks, taskCount);
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println(indent(5) + "Your list is full.");
-                }
-                if (taskCount == 1) {
+                tasks.add(task);
+                System.out.println(indent(5) + "Added new task:");
+                System.out.println(indent(7) + task);
+                saveTasks(tasks);
+                if (task.size() == 1) {
                     System.out.println(indent(5) + "You now have 1 task.");
                 } else {
-                    System.out.println(indent(5) + "You now have " + taskCount + " tasks.");
+                    System.out.println(indent(5) + "You now have " + tasks.size() + " tasks.");
                 }
                 System.out.println(indent() + HORIZONTAL_RULE + "\n");
             }
         }
     }
 
-    public static void saveTasks(Task[] tasks, int taskCount) {
+    public static void saveTasks(ArrayList<Task> tasks) {
         try {
             File file = new File(FILE_PATH);
             file.getParentFile().mkdirs();
             FileWriter writer = new FileWriter(file);
-            for (int i = 0; i < taskCount; i++) {
-                writer.write(taskToFileString(tasks[i]) + "\n");
+            for (Task task : tasks) {
+                writer.write(taskToFileString(task) + "\n");
             }
             writer.close();
         } catch (IOException e) {
@@ -126,8 +146,7 @@ public class Duchess {
         }
     }
 
-    public static int loadTasks(Task[] tasks) {
-        int count = 0;
+    public static void loadTasks(ArrayList<Task> tasks) {
         File file = new File(FILE_PATH);
         if (!file.exists()) {
             return 0;
@@ -151,7 +170,7 @@ public class Duchess {
                     if (isDone) {
                         task.setDone();
                     }
-                    tasks[count++] = task;
+                    tasks.add(task);
                 } catch (Exception e) {
                     System.out.println("Skipping corrupted line \"" + line + "\"");
                 }
@@ -159,12 +178,15 @@ public class Duchess {
         } catch (IOException e) {
             System.out.println(indent(5) + "Error loading tasks.");
         }
-        return count;
     }
 
-    public static void printTasks(Task[] tasks) {
-        for (int i = 0; i < tasks.length; i++) {
-            System.out.println(indent(5) + (i + 1) + ". " + tasks[i]);
+    public static void printTasks(ArrayList<Task> tasks) {
+        if (tasks.isEmpty()) {
+            System.out.println(indent(5) + "You have no tasks.");
+        } else {
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println(indent(5) + (i + 1) + ". " + tasks.get(i));
+            }
         }
     }
 
