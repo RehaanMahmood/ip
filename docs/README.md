@@ -175,7 +175,7 @@ Expected output:
 bye
 ```
 
-Exits the application.
+Exits the application
 
 Expected output:
 ```
