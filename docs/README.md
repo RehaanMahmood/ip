@@ -169,13 +169,13 @@ Expected output:
 
 ```
 
-## Exiting the application.
+## Exiting the application
 
 ```
 bye
 ```
 
-Exits the application
+Exits the application.
 
 Expected output:
 ```
